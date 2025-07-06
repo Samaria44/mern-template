@@ -1,0 +1,3 @@
+PORT=5000
+DBName=app_db
+JwtSecret=Admin$100

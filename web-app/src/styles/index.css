@@ -1,0 +1,8 @@
+.main-list-item:hover{
+background-color: #50413C !important;
+color: #fff;
+}
+
+.main-list-item:hover > .list-icons{
+color: #fff;
+}
