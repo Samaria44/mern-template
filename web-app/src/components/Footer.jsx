@@ -9,7 +9,7 @@ export const Footer = () => {
         <Box sx={{
             background: theme.palette.background.default,
             width: "100%",
-            height: 50,
+            height: 55,
             position: "fixed",
             bottom: 0,
             left: 0,

@@ -20,19 +20,12 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Department",
     },
-    assigned_projects: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Project"
-        }
-    ],
     roles: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Role"
         }
     ],
-    
     created_at: {
         type: Date,
         default: Date.now,

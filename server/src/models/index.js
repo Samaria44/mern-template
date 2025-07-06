@@ -7,7 +7,7 @@ db.mongoose = mongoose;
 
 db.user = require("./User");
 db.role = require("./Role");
-db.device = require("./Device");
+// db.device = require("./Device");
 db.Permissions = require("./Permission");
 db.refreshToken = require("./RefreshToken");
 

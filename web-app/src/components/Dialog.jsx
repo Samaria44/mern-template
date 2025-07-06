@@ -44,7 +44,7 @@ export default function ScrollDialog({ title, form, submitHandler, data, modalOp
             >
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems:"center" }}>
                     <DialogTitle id="scroll-dialog-title">{data != null ? `Update ${title}` : `Add ${title}`}</DialogTitle>
-                    <CloseIcon onClick={handleCloseModal} display={"block"} sx={{mr:2}}/>
+                    <CloseIcon onClick={handleCloseModal} display={"block"} sx={{mr:2}} cursor="pointer"/>
                 </Box>
                 <DialogContent dividers={scroll === 'paper'}>
                     {/* <DialogContentText

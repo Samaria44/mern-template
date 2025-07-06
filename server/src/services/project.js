@@ -23,12 +23,12 @@ const getActiveProjects = async (id, role) => {
 
     // console.log("project hits", role[0].name)
     if (role[0].name == 'user') {
-        const user = await User.findById(id).select('assigned_projects');
-        if (!user) {
-            throw new Error('User not found');
-        }
+        // const user = await User.findById(id).select('assigned_projects');
+        // if (!user) {
+        //     throw new Error('User not found');
+        // }
         const projects = await Project.find({
-            _id: { $in: user.assigned_projects },
+            // _id: { $in: user.assigned_projects },
             state: 'active',
             is_deleted: false,
         });

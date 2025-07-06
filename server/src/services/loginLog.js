@@ -1,5 +1,4 @@
 const UserLogInLog = require("../models/UserLogInLogs");
-const TeamLogInLog = require("../models/TeamLogInLogs");
 
 const createUserLogInLog = async (data) => {
     const logInLog = await UserLogInLog.create(data);
@@ -36,10 +35,6 @@ const getUsersloginlogs = async (query) => {
     return logs;
 };
 
-const createTeamLogInLog = async (data) => {
-    const logInLog = await TeamLogInLog.create(data);
-    return logInLog;
-};
 
 const getTeamsloginlogs = async (query) => {
     // console.log("query", query)
@@ -73,7 +68,6 @@ const getTeamsloginlogs = async (query) => {
 
 module.exports = {
     createUserLogInLog,
-    createTeamLogInLog,
     getUsersloginlogs,
     getTeamsloginlogs
 };

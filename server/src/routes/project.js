@@ -10,6 +10,3 @@ router.put('/:id', authJwt.checkPermission('project', 'update'), projectControll
 router.delete('/:id', authJwt.checkPermission('project', 'delete'), projectController.deleteProject);
 
 module.exports = router;
-
-
-//app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);

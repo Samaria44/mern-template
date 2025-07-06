@@ -7,9 +7,7 @@ import { convertUtcToLocal, hasEntityPermission } from '../utils/helperFunctions
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { useAuth } from '../contexts/authContext';
 import { useSnackbar } from 'notistack';
-import ScrollModal from './Modal';
 import UserForm from './UserForm';
-import LinkProjectForm from './LinkProjectForm';
 
 const UsersTab = () => {
     const [users, setUsers] = useState(null);
@@ -17,9 +15,6 @@ const UsersTab = () => {
     const [data, setData] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(false);
-    const [linkProjectData, setLinkProjectData] = useState(null);
-    const [linkProjectModalOpen, setLinkProjectModalOpen] = useState(false);
-
     const { enqueueSnackbar } = useSnackbar();
     const { permissions } = useAuth();
 
@@ -30,14 +25,6 @@ const UsersTab = () => {
     const handleCloseModal = () => {
         setModalOpen(false);
         setData(null);
-    };
-
-    const handleOpenLinkProjectModal = () => {
-        setLinkProjectModalOpen(true);
-    };
-
-    const handleCloseLinkProjectModal = () => {
-        setLinkProjectModalOpen(false);
     };
 
     const handleEditClick = async (rowData) => {
@@ -55,11 +42,6 @@ const UsersTab = () => {
                 }
             }
         }
-    };
-
-    const handleLinkProjectClick = async (rowData) => {
-        setLinkProjectData(rowData);
-        handleOpenLinkProjectModal();
     };
 
     const handleSubmitForm = async (userData) => {
@@ -165,14 +147,6 @@ const UsersTab = () => {
                             handleCloseModal={handleCloseModal}
                         />
                     )}
-                    <ScrollModal
-                        title={"Link Project to User"}
-                        innerComponent={<LinkProjectForm data={linkProjectData} />}
-                        data={data}
-                        modalOpen={linkProjectModalOpen}
-                        handleOpenModal={handleOpenLinkProjectModal}
-                        handleCloseModal={handleCloseLinkProjectModal}
-                    />
                     <Button
                         sx={{ ml: 1, mb: 2 }}
                         onClick={fetchUser}
@@ -191,9 +165,7 @@ const UsersTab = () => {
                     columns={columns}
                     handleEditClick={handleEditClick}
                     handleDeleteClick={handleDeleteClick}
-                    handleLinkProjectClick={handleLinkProjectClick}
                     action={true}
-                    link={true}
                 />
             )}
         </Box>

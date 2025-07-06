@@ -2,7 +2,6 @@ const Role = require('../models/Role');
 const User = require('../models/User');
 const Permission = require('../models/Permission');
 const bcrypt = require("bcryptjs");
-const Team = require('../models/Team');
 const { generatePermissions } = require('../utils/HelperFunctions');
 
 const createUser = async (userData) => {
@@ -84,8 +83,7 @@ const getUsers = async () => {
         .populate({
             path: 'department',
             select: 'name'
-        })
-        .populate('assigned_projects');
+        });
 
     const transformedUsers = users
         .filter(user => user.roles.length > 0)
@@ -98,18 +96,11 @@ const getUsers = async () => {
             cnic: user.cnic,
             department_name: user.department ? user.department.name : 'N/A',
             department: user.department ? user.department._id : 'N/A',
-            // assigned_projects: user?.assigned_projects,
             role: user.roles.map(role => role.name).join(', '),
             created_at: user.created_at
         }));
 
     return transformedUsers;
-};
-
-const getUserAssignedProjects = async (id) => {
-    const users = await User.findById({ _id: id, is_deleted: false })
-        .populate('assigned_projects');
-    return users;
 };
 
 const getUser = async (id) => {
@@ -141,28 +132,6 @@ const getUser = async (id) => {
 
     // Return the transformed user data
     return transformedUser(user);
-};
-
-const getFreeUsers = async () => {
-    // console.log("called");
-    // Get all user IDs that are members of any team
-    const teams = await Team.find({}, 'members').lean();
-    const memberIds = teams.reduce((acc, team) => {
-        return acc.concat(team.members);
-    }, []);
-
-
-
-    // Find users whose IDs are not in the list of member IDs
-    const freeUsers = await User.find({ _id: { $nin: memberIds }, is_deleted: false })
-        .populate('roles', 'name'); // Populate roles to filter them later
-
-    // Filter out users with the 'super admin' role
-    const nonSuperAdminUsers = freeUsers.filter(user => {
-        return !user.roles.some(role => role.name === 'super admin');
-    });
-
-    return nonSuperAdminUsers;
 };
 
 const updateUser = async (id, userData) => {
@@ -202,56 +171,18 @@ const updateUser = async (id, userData) => {
 
 const deleteUser = async (id, data) => {
     return await User.findByIdAndUpdate(id, data);
-    // return await User.findByIdAndDelete(id);
 };
 
 const getUserById = async (id) => {
     return await User.findById(id);
 };
 
-const addProjectToUser = async (id, data) => {
-    const user = await User.findById(id);
-    if (!user) {
-        throw new Error('User not found');
-    }
-
-    // Check if the project is already assigned
-    if (user.assigned_projects.includes(data.project)) {
-        throw new Error('Project already assigned to user');
-    }
-
-    user.assigned_projects.push(data.project);
-    await user.save();
-
-    return user.populate("assigned_projects");
-}
-
-const removeProjectFromUser = async (id, data) => {
-
-    const user = await User.findById(id);
-    if (!user) {
-        throw new Error('User not found');
-    }
-
-    const projectIndex = user.assigned_projects.indexOf(data);
-    if (projectIndex === -1) {
-        throw new Error('Project not assigned to user');
-    }
-
-    user.assigned_projects.splice(projectIndex, 1);
-    await user.save();
-    return user;
-}
 
 module.exports = {
     createUser,
     getUser,
     getUsers,
-    getFreeUsers,
     updateUser,
     deleteUser,
-    getUserById,
-    addProjectToUser,
-    removeProjectFromUser,
-    // getUserAssignedProjects
+    getUserById
 };

@@ -5,7 +5,6 @@ const authConfig = require("../config/auth.config");
 const User = db.user;
 const Role = db.role;
 const Permissions = db.Permissions;
-// const mongoose = require('mongoose');
 
 const { TokenExpiredError } = jwt;
 
@@ -37,28 +36,6 @@ const checkPermission = (entity, action) => {
   }
 };
 
-// const verifyToken = (req, res, next) => {
-//   let token = req.headers["authorization"];
-
-//   console.log(token);
-//   if (!token) {
-//     return res.status(403).send({ message: "No token provided!" });
-//   }
-
-//   jwt.verify(token, config.secret, (err, decoded) => {
-//     if (err) {
-//       return catchError(err, res);
-//     }
-//     req.userId = decoded.id;
-//     next();
-//   });
-// };
-
-// const verifyToken = (req, res, next) => {
-//   console.log('Middleware reached');
-//   // next();
-// };
-
 function getUserIdFromJwt(token) {
   try {
     if (token.startsWith("Bearer ")) {
@@ -74,6 +51,7 @@ function getUserIdFromJwt(token) {
     return null;
   }
 }
+
 function getUserRoleFromJwt(token) {
   try {
     if (token.startsWith("Bearer ")) {
@@ -114,11 +92,6 @@ const verifyToken = (req, res, next) => {
   });
   // next();
 };
-
-// const verifyToken = (req, res, next) => {
-//   console.log('Middleware reached');
-//   next();
-// };
 
 const verifyAdminToken = (req, res, next) => {
   let token = req.headers["x-access-token"];

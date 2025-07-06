@@ -35,11 +35,6 @@ export default function ControledDataGrid({ entity, columns, tableData = [], han
               <VisibilityIcon fontSize="small" />
             </Tooltip>
           </IconButton>}
-          {(hasEntityPermission('read', entity, permissions) || hasEntityPermission('read_self', entity, permissions)) && allowMap && <IconButton aria-label="map" onClick={() => handleViewMapClick(params.row)}>
-            <Tooltip title="map" placement="bottom">
-              <LocationOnIcon fontSize="small" />
-            </Tooltip>
-          </IconButton>}
           {hasEntityPermission('update', entity, permissions) && <IconButton aria-label="edit" onClick={() => handleEditClick(params.row)}>
             <Tooltip title="update" placement="bottom">
               <EditIcon fontSize="small" />
@@ -53,11 +48,6 @@ export default function ControledDataGrid({ entity, columns, tableData = [], han
           {hasEntityPermission('delete', entity, permissions) && <IconButton aria-label="delete" onClick={() => handleDeleteClick(params.row._id)}>
             <Tooltip title="delete" placement="bottom">
               <DeleteIcon fontSize="small" />
-            </Tooltip>
-          </IconButton>}
-          {hasEntityPermission('read', "project", permissions) && link && <IconButton aria-label="edit" onClick={() => handleLinkProjectClick(params.row)}>
-            <Tooltip title="link projects" placement="bottom">
-              <AccountTreeIcon fontSize="small" />
             </Tooltip>
           </IconButton>}
         </ButtonGroup>

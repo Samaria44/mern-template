@@ -11,7 +11,7 @@ import DynamicBreadcrumbs from './DynamicBreadcrumbs';
 import LogoutIcon from '@mui/icons-material/Logout';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
-import {Footer} from './Footer';
+import { Footer } from './Footer';
 import { navItems } from '../constants/NaveItems';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { authService } from '../services/authServices';
@@ -19,6 +19,7 @@ import { useAuth } from '../contexts/authContext';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Menu, MenuItem } from '@mui/material';
 import Logo from "../assets/logo.png";
+import User from "../assets/user.png";
 import screenfull from "screenfull";
 
 
@@ -92,11 +93,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function MiniDrawer({ children }) {
     const navigate = useNavigate()
     const theme = useTheme();
-    const { user, role } = useAuth();
+    const { user, userName, role, logout, permissions } = useAuth();
     const [open, setOpen] = React.useState(false);
     const [menuAnchor, setMenuAnchor] = React.useState(null);
-
-    const { logout, userName, permissions } = useAuth();
 
     const [isFullscreen, setIsFullscreen] = React.useState(true);
 
@@ -208,9 +207,8 @@ export default function MiniDrawer({ children }) {
                             <Typography variant="h6" sx={{
                                 // color: theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.main,
                                 fontWeight: 'bold',
-
                             }}>
-                                {userName}
+                                {userName || "user"}
                             </Typography>
                             <Typography variant="subtitle2" sx={{
                                 // color: theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.main,
@@ -239,10 +237,51 @@ export default function MiniDrawer({ children }) {
                             </Typography>
                         </MenuItem>
                     </Menu>
-                    {/* </Box> */}
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open}>
+                <Box sx={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    borderTop: 1,
+                    borderColor: theme.palette.divider,
+                    bgcolor: theme.palette.background.paper,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    px: 1.75,
+                    py: 0.5,
+                    mt: 'auto'
+                }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Avatar
+                            src={user?.profilePicture || User}
+                            sx={{
+                                bgcolor: theme.palette.primary.main,
+                                width: 35,
+                                height: 35,
+                                mr: 2
+                            }}
+                        />
+                        <Box>
+                            <Typography variant="subtitle2" color="text.primary">
+                                {userName || 'User'}
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                                {role || 'User'}
+                            </Typography>
+                        </Box>
+                    </Box>
+                    <IconButton
+                        color="inherit"
+                        onClick={logout}
+                        size="small"
+                    >
+                        <LogoutIcon />
+                    </IconButton>
+                </Box>
                 <DrawerHeader>
                     <Box style={{ width: "100%", display: "flex", justifyContent: "center" }} >
                         <img src={Logo} alt="logo" style={{ width: "70px", ...(!open && { display: 'none' }) }} />
@@ -262,6 +301,8 @@ export default function MiniDrawer({ children }) {
                                         minHeight: 48,
                                         justifyContent: open ? 'initial' : 'center',
                                         px: 2.5,
+                                        m: 1,
+                                        borderRadius: 2,
                                         color: (currentPath === navItem.url && '#fff'),
                                         backgroundColor: currentPath === navItem.url ? theme.palette.primary.main : 'transparent',
                                         // '&:hover': {
@@ -295,7 +336,7 @@ export default function MiniDrawer({ children }) {
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1, width: "80%" }}>
                 <DrawerHeader />
-                <Box sx={{ p: 3, flexGrow: 1 }}>
+                <Box sx={{ p: 3, flexGrow: 1, mb: 5 }}>
                     <DynamicBreadcrumbs />
                     {children}
                 </Box>
