@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ControledDataGrid from './ControledDataGrid';
-import { Box, Button, TextField, LinearProgress } from '@mui/material';
+import { Box, Button, TextField, LinearProgress, Switch } from '@mui/material';
 import ScrollDialog from './Dialog';
 import { userService } from '../services/userServices';
 import { convertUtcToLocal, hasEntityPermission } from '../utils/helperFunctions';
@@ -15,6 +15,7 @@ const UsersTab = () => {
     const [data, setData] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(false);
+    const [statusChangeLoading, setStatusChangeLoading] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
     const { permissions } = useAuth();
 
@@ -41,6 +42,19 @@ const UsersTab = () => {
                     setUsers((prevUsers) => prevUsers.filter(user => user._id !== rowId));
                 }
             }
+        }
+    };
+
+    const handleStatusChange = async (userData) => {
+        setStatusChangeLoading(true);
+        try {
+            await userService.updateUser(userData._id, { active: !userData.active });
+            fetchUser();
+            enqueueSnackbar('Status updated successfully', { variant: 'success' });
+        } catch (error) {
+            enqueueSnackbar(error.message, { variant: 'error' });
+        } finally {
+            setStatusChangeLoading(false);
         }
     };
 
@@ -95,21 +109,26 @@ const UsersTab = () => {
         : [];
 
     const columns = [
-        { field: 'name', headerName: 'Name', width: 200 },
+        { field: 'name', headerName: 'Name', width: 150 },
         { field: 'email', headerName: 'Email', width: 200 },
         { field: 'username', headerName: 'Username', width: 150 },
-        { field: 'cnic', headerName: 'CNIC', width: 150, align: "center", headerAlign: 'center' },
-        { field: 'number', headerName: 'Number', width: 150, align: "center", headerAlign: 'center' },
-        { field: 'department_name', headerName: 'Department', width: 150, align: "center", headerAlign: 'center' },
-        { field: 'role', headerName: 'Role', width: 100, align: "center", headerAlign: 'center' },
+        { field: 'number', headerName: 'Number', width: 150 },
+        { field: 'cnic', headerName: 'CNIC', width: 150 },
+        { field: 'department_name', headerName: 'Department', width: 150 },
+        { field: 'role', headerName: 'Role', width: 150 },
         {
-            field: 'created_at',
-            headerName: 'Created at',
-            width: 200,
-            align: "center",
-            headerAlign: 'center',
-            valueFormatter: (params) => convertUtcToLocal(params)
+            field: 'active',
+            headerName: 'Status',
+            width: 120,
+            renderCell: (params) => (
+                <Switch
+                    checked={params.row.active}
+                    onChange={() => handleStatusChange(params.row)}
+                    color="primary"
+                />
+            )
         },
+        { field: 'created_at', headerName: 'Created At', width: 150, valueGetter: (params) => params.value ? new Date(params.value).toLocaleDateString() : '' },
         {
             field: 'last_login',
             headerName: 'Last Login',

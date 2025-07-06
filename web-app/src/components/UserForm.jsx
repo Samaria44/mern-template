@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, TextField, MenuItem } from '@mui/material';
+import { Box, Button, TextField, MenuItem, FormControlLabel, Switch } from '@mui/material';
 import { departmentService } from '../services/departmentServices';
 
 const UserForm = ({ submitHandler, data }) => {
@@ -11,7 +11,8 @@ const UserForm = ({ submitHandler, data }) => {
         number: '',
         role: '',
         cnic: '',
-        department: ''
+        department: '',
+        active: true
     });
 
     const [departments, setDepartments] = useState(null);
@@ -176,6 +177,19 @@ const UserForm = ({ submitHandler, data }) => {
                 <MenuItem value="user">User</MenuItem>
                 <MenuItem value="admin">Admin</MenuItem>
             </TextField>
+            
+            <FormControlLabel
+                control={
+                    <Switch
+                        checked={formValues.active}
+                        onChange={(e) => setFormValues({ ...formValues, active: e.target.checked })}
+                        name="active"
+                        color="primary"
+                    />
+                }
+                label="Active"
+                sx={{ mt: 2 }}
+            />
             
             <Button 
                 type="submit" 

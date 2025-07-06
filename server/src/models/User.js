@@ -29,7 +29,10 @@ const userSchema = new mongoose.Schema({
     created_at: {
         type: Date,
         default: Date.now,
-        required: true
+    },
+    active: {
+        type: Boolean,
+        default: true
     },
     created_by: {
         type: mongoose.Schema.Types.ObjectId,

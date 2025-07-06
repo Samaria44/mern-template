@@ -72,18 +72,14 @@ const createUser = async (userData) => {
     };
 };
 
-const getUsers = async () => {
-    const users = await User.find({ is_deleted: false })
-        .select('_id name username number email roles department cnic created_at')
-        .populate({
-            path: 'roles',
-            match: { name: { $ne: 'super admin' } },
-            select: 'name'
-        })
-        .populate({
-            path: 'department',
-            select: 'name'
-        });
+const getUsers = async (query = {}) => {
+    const users = await User.find({ 
+        is_deleted: false,
+        // active: true,
+        ...query
+    })
+        .populate('department', 'name')
+        .populate('roles', 'name');
 
     const transformedUsers = users
         .filter(user => user.roles.length > 0)
@@ -106,15 +102,13 @@ const getUsers = async () => {
 const getUser = async (id) => {
     // Find user by ID with populated fields
     const user = await User.findById(id)
-        .select('_id name username number email roles department cnic created_at')
-        .populate({
-            path: 'roles',
-            select: 'name'
-        })
-        .populate({
-            path: 'department',
-            select: 'name'
-        });
+        .populate('department', 'name')
+        .populate('roles', 'name');
+    
+    // Only show active users by default
+    if (!user?.active) {
+        throw new Error('User is inactive');
+    }
 
     // Transform the user data
     const transformedUser = (user) => ({
@@ -129,6 +123,9 @@ const getUser = async (id) => {
         role: user.roles.map(role => role.name).join(', '),
         created_at: user.created_at
     });
+
+    // Return the transformed user data
+    return transformedUser(user);
 
     // Return the transformed user data
     return transformedUser(user);
