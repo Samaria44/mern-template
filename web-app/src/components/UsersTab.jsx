@@ -48,7 +48,7 @@ const UsersTab = () => {
     const handleStatusChange = async (userData) => {
         setStatusChangeLoading(true);
         try {
-            await userService.updateUser(userData._id, { active: !userData.active });
+            await userService.updateUserStatus(userData._id, { active: !userData.active });
             fetchUser();
             enqueueSnackbar('Status updated successfully', { variant: 'success' });
         } catch (error) {

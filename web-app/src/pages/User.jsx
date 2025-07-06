@@ -4,6 +4,7 @@ import { Box, Tabs, Tab } from '@mui/material';
 import { useAuth } from '../contexts/authContext';
 import UsersTab from '../components/UsersTab';
 import LoginLogsTab from '../components/LoginLogsTab';
+import EntityTab from '../components/EntityTab';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -50,6 +51,9 @@ export const Users = () => {
                         {["SUPER ADMIN", "ADMIN"].includes(role) && (
                             <Tab label="Login Logs" {...a11yProps(1)} />
                         )}
+                        {["SUPER ADMIN", "ADMIN"].includes(role) && (
+                            <Tab label="Entities" {...a11yProps(2)} />
+                        )}
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
@@ -58,6 +62,11 @@ export const Users = () => {
                 {["SUPER ADMIN", "ADMIN"].includes(role) && (
                     <TabPanel value={value} index={1}>
                         <LoginLogsTab />
+                    </TabPanel>
+                )}
+                {["SUPER ADMIN", "ADMIN"].includes(role) && (
+                    <TabPanel value={value} index={2}>
+                        <EntityTab />
                     </TabPanel>
                 )}
             </Box>

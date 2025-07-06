@@ -6,6 +6,7 @@ const authUsers = require('./user');
 const projectRoutes = require('./project');
 const departmentRoutes = require('./department');
 const permissionRoutes = require('./permission');
+const entityRoutes = require('./entity');
 const { verifyToken } = require('../middleware/authMiddleware');
 const path = require('path');
 
@@ -21,6 +22,8 @@ router.use(
     '/v1/src/uploads/complain-logs', 
     express.static(path.join(__dirname, '../uploads/complain-logs'))
 );
+
+router.use('/v1/entities', entityRoutes);
 
 router.use('/v1/auth', authRoutes);
 

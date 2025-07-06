@@ -27,22 +27,6 @@ export const userService = {
             return error;
         }
     },
-    getUserAssignedProjects: async (user) => {
-        try {
-            const res = await fetchApi("users/userAssignedProjects/" + user, "GET");
-            return res;
-        } catch (error) {
-            return error;
-        }
-    },
-    getFreeUsers: async () => {
-        try {
-            const res = await fetchApi("users/free", "GET");
-            return res;
-        } catch (error) {
-            return error;
-        }
-    },
     updateUser: async (_id, data) => {
         try {
             const res = await fetchApi("users/" + _id, "PUT", data);
@@ -51,25 +35,17 @@ export const userService = {
             return error;
         }
     },
+    updateUserStatus: async (_id, data) => {
+        try {
+            const res = await fetchApi("users/" + _id + "/toggle-status", "PUT", data);
+            return res;
+        } catch (error) {
+            return error;
+        }
+    },
     createUser: async (data) => {
         try {
             const res = await fetchApi("users", "POST", data);
-            return res;
-        } catch (error) {
-            return error;
-        }
-    },
-    addProjectToUser: async (data) => {
-        try {
-            const res = await fetchApi("users/addProjectToUser", "POST", data);
-            return res;
-        } catch (error) {
-            return error;
-        }
-    },
-    removeProjectFromUser: async (data) => {
-        try {
-            const res = await fetchApi("users/removeProjectFromUser", "POST", data);
             return res;
         } catch (error) {
             return error;

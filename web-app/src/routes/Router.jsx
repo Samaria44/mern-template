@@ -33,6 +33,7 @@ export default function Router() {
           <Route path="/" element={<Home />} />
           {hasPermission("user", permissions) && <Route path="/users" element={<Users />} />}
           {hasPermission("project", permissions) && <Route path="/projects" element={<Project />} />}
+          {/* {<Route path="/entities" element={<Entity />} />} */}
           {hasPermission("permission", permissions) && <Route path="/permissions" element={<Permission />} />}
           {hasPermission("department", permissions) && <Route path="/departments" element={<Department />} />}
           <Route path="/settings" element={<Settings />} />

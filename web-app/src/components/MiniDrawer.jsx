@@ -116,7 +116,7 @@ export default function MiniDrawer({ children }) {
 
     function hasPermission(param, permissions) {
         // Check if the provided parameter exists in the object
-        if (['home', 'profile', 'setting'].includes(param)) {
+        if (['home', 'profile', 'setting', 'entity'].includes(param)) {
             return true;
         } else {
             // const permissions = getPermissions();
@@ -151,7 +151,7 @@ export default function MiniDrawer({ children }) {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-                        CMS Dashboard
+                        Dashboard
                     </Typography>
 
                     {/* <Avatar

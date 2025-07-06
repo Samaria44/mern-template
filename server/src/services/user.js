@@ -90,6 +90,7 @@ const getUsers = async (query = {}) => {
             username: user.username,
             number: user.number,
             cnic: user.cnic,
+            active: user.active,
             department_name: user.department ? user.department.name : 'N/A',
             department: user.department ? user.department._id : 'N/A',
             role: user.roles.map(role => role.name).join(', '),
@@ -126,9 +127,6 @@ const getUser = async (id) => {
 
     // Return the transformed user data
     return transformedUser(user);
-
-    // Return the transformed user data
-    return transformedUser(user);
 };
 
 const updateUser = async (id, userData) => {
@@ -142,6 +140,7 @@ const updateUser = async (id, userData) => {
     if (existingUser && existingUser._id != id) {
         throw new Error('User with this email or username already exists');
     }
+    
     const role = await Role.findOne({ name: userData.role });
     await User.findByIdAndUpdate(id, { ...userData, roles: [role._id] });
 
@@ -158,6 +157,7 @@ const updateUser = async (id, userData) => {
         email: populatedUser.email,
         username: populatedUser.username,
         number: populatedUser.number,
+        active: populatedUser.active,
         cnic: populatedUser.cnic,
         department_name: populatedUser.department ? populatedUser.department.name : 'N/A',
         department: populatedUser.department ? populatedUser.department._id : 'N/A',
@@ -170,6 +170,33 @@ const deleteUser = async (id, data) => {
     return await User.findByIdAndUpdate(id, data);
 };
 
+const toggleUserStatus = async (id) => {
+    const user = await User.findById(id);
+    if (!user) {
+        throw new Error('User not found');
+    }
+
+    user.active = !user.active;
+    await user.save();
+
+    // Transform the user data
+    const transformedUser = (user) => ({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        username: user.username,
+        number: user.number,
+        active: user.active,
+        cnic: user.cnic,
+        department_name: user.department ? user.department.name : 'N/A',
+        department: user.department ? user.department._id : 'N/A',
+        role: user.roles.map(role => role.name).join(', '),
+        created_at: user.created_at
+    });
+
+    return transformedUser(user);
+};
+
 const getUserById = async (id) => {
     return await User.findById(id);
 };
@@ -177,9 +204,10 @@ const getUserById = async (id) => {
 
 module.exports = {
     createUser,
-    getUser,
     getUsers,
+    getUser,
     updateUser,
     deleteUser,
+    toggleUserStatus,
     getUserById
 };
