@@ -1,2 +1,2 @@
-# GCS-CMS
- GCS-CMS (web and app)
+# MERN-Template
+ MERN-Template (web and app)
