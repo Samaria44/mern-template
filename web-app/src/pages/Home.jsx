@@ -11,7 +11,7 @@ import ProjectBarChart from '../components/charts/ProjectBarChart';
 import CollapsableDrawer from '../components/CollapsableDrawer';
 
 export const Home = () => {
-  
+
   const [projects, setProjects] = useState(null);
   const fetchProjects = async () => {
     try {
@@ -29,7 +29,7 @@ export const Home = () => {
 
   return (
     <MiniDrawer>
-      <CollapsableDrawer />
+      {/* <CollapsableDrawer /> */}
 
     </MiniDrawer>
   );

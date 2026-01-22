@@ -7,6 +7,8 @@ const projectRoutes = require('./project');
 const departmentRoutes = require('./department');
 const permissionRoutes = require('./permission');
 const entityRoutes = require('./entity');
+const locationRoutes = require('./location');
+const storeRoutes = require('./store');
 const { verifyToken } = require('../middleware/authMiddleware');
 const path = require('path');
 
@@ -34,5 +36,6 @@ router.use('/v1/projects', projectRoutes);
 router.use('/v1/users', authUsers);
 router.use('/v1/departments', departmentRoutes);
 router.use('/v1/permission', permissionRoutes);
-
+router.use('/v1/locations', locationRoutes);
+router.use('/v1/stores', storeRoutes);
 module.exports = router;

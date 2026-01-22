@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    location: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Location",
+    },
     department: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Department",

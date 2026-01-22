@@ -20,6 +20,7 @@ let corsOptions = {
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
+
 //app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json

@@ -90,7 +90,7 @@ const EntityForm = ({ submitHandler, data }) => {
                 value={formValues.type}
                 onChange={handleChange}
             >
-                <MenuItem value="">---select---</MenuItem>
+                <MenuItem value="">---Select---</MenuItem>
                 <MenuItem value="type1">Type 1</MenuItem>
                 <MenuItem value="type2">Type 2</MenuItem>
                 <MenuItem value="type3">Type 3</MenuItem>

@@ -49,6 +49,7 @@ export const authService = {
             return res;
         } catch (error) {
             console.log(error);
+            throw error; // Re-throw the error so it can be caught in Login.jsx
         }
     },
     logout: async () => {

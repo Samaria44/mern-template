@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Button, TextField, MenuItem, FormControlLabel, Switch } from '@mui/material';
 import { departmentService } from '../services/departmentServices';
+import { locationService } from '../services/locationServices';
 
 const UserForm = ({ submitHandler, data }) => {
     const [formValues, setFormValues] = useState({
@@ -12,10 +13,13 @@ const UserForm = ({ submitHandler, data }) => {
         role: '',
         cnic: '',
         department: '',
+        location: '',
         active: true
     });
 
     const [departments, setDepartments] = useState(null);
+    const [locations, setLocations] = useState(null);
+
     const [formErrors, setFormErrors] = useState({});
 
     useEffect(() => {
@@ -33,8 +37,20 @@ const UserForm = ({ submitHandler, data }) => {
         }
     };
 
+    const fetchLocations = async () => {
+        try {
+            const response = await locationService.getLocations();
+            const allLocations = response || [];
+            const activeLocations = allLocations.filter(loc => loc.active);
+            setLocations(activeLocations);
+        } catch (error) {
+            console.error('Error fetching Locations:', error);
+        }
+    };
+
     useEffect(() => {
         fetchDepartments();
+        fetchLocations();
     }, []);
 
     const handleChange = (e) => {
@@ -53,6 +69,7 @@ const UserForm = ({ submitHandler, data }) => {
         if (!formValues.username) errors.username = 'Username is required';
         if (!formValues.number) errors.number = 'Contact number is required';
         if (!formValues.department) errors.department = 'Department is required';
+        if (!formValues.location) errors.location = 'Location is required';
 
         setFormErrors(errors);
         return Object.keys(errors).length === 0;
@@ -161,6 +178,25 @@ const UserForm = ({ submitHandler, data }) => {
                 {departments && departments.map((department, index) => (
                     <MenuItem value={department._id} key={index}>
                         {department.name}
+                    </MenuItem>
+                ))}
+            </TextField>
+            
+            <TextField
+                name="location"
+                select
+                size="small"
+                label="Location"
+                sx={{ width: "100%" }}
+                value={formValues.location}
+                onChange={handleChange}
+                error={!!formErrors.location}
+                helperText={formErrors.location}
+            >
+                <MenuItem value="">---select---</MenuItem>
+                {locations && locations.map((location, index) => (
+                    <MenuItem value={location._id} key={index}>
+                        {location.name}
                     </MenuItem>
                 ))}
             </TextField>

@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 
-const entities = ['project', 'complain', 'vehicle', 'user', 'permission', 'department', 'device', "equipment", "subEquipment", "equipmentProblem", "team", "teamMember", "reason"];
+const entities = ['project', 'complain', 'vehicle', 'user', 'permission', 'location', 'store', 'department', 'device', "equipment", "subEquipment", "equipmentProblem", "team", "teamMember", "reason"];
 const roles = ['create', 'read', 'update', 'delete', 'read_self'];
 
 const permissionsSchemaFields = {

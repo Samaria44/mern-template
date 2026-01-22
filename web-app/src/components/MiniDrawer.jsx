@@ -116,7 +116,7 @@ export default function MiniDrawer({ children }) {
 
     function hasPermission(param, permissions) {
         // Check if the provided parameter exists in the object
-        if (['home', 'profile', 'setting', 'entity'].includes(param)) {
+        if (['home', 'profile', 'setting', 'entity',location].includes(param)) {
             return true;
         } else {
             // const permissions = getPermissions();

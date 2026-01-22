@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ControledDataGrid from './ControledDataGrid';
-import { Box, Button, TextField, LinearProgress, Switch } from '@mui/material';
+import { Box, Button, TextField, Switch } from '@mui/material';
+
 import ScrollDialog from './Dialog';
 import { userService } from '../services/userServices';
 import { convertUtcToLocal, hasEntityPermission } from '../utils/helperFunctions';
@@ -115,6 +116,7 @@ const UsersTab = () => {
         { field: 'number', headerName: 'Number', width: 150 },
         { field: 'cnic', headerName: 'CNIC', width: 150 },
         { field: 'department_name', headerName: 'Department', width: 150 },
+        { field: 'location_name', headerName: 'Location', width: 150 },
         { field: 'role', headerName: 'Role', width: 150 },
         {
             field: 'active',
@@ -176,7 +178,6 @@ const UsersTab = () => {
                     </Button>
                 </Box>
             </Box>
-            <LinearProgress sx={{ display: loading === false && "none" }} />
             {users && (
                 <ControledDataGrid
                     entity={'user'}
@@ -185,6 +186,7 @@ const UsersTab = () => {
                     handleEditClick={handleEditClick}
                     handleDeleteClick={handleDeleteClick}
                     action={true}
+                    loading={loading}
                 />
             )}
         </Box>

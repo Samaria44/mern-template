@@ -21,6 +21,7 @@ const createUser = async (userData) => {
         name: userData.name,
         username: userData.username,
         number: userData.number,
+        location: userData.location,
         department: userData.department,
         cnic: userData.cnic,
         password: bcrypt.hashSync(userData.email + "@123", 8),
@@ -47,6 +48,7 @@ const createUser = async (userData) => {
 
     const populatedUser = await User.findById(savedUser._id)
         .populate('department')
+        .populate('location')
         .populate({
             path: 'roles',
             select: 'name'
@@ -67,6 +69,8 @@ const createUser = async (userData) => {
         cnic: populatedUser.cnic,
         department_name: populatedUser.department ? populatedUser.department.name : 'N/A',
         department: populatedUser.department ? populatedUser.department._id : 'N/A',
+        location_name: populatedUser.location ? populatedUser.location.name : 'N/A',
+        location: populatedUser.location ? populatedUser.location._id : 'N/A',
         role: populatedUser.roles[0].name,
         created_at: populatedUser.created_at
     };
@@ -79,6 +83,7 @@ const getUsers = async (query = {}) => {
         ...query
     })
         .populate('department', 'name')
+        .populate('location', 'name')
         .populate('roles', 'name');
 
     const transformedUsers = users
@@ -93,6 +98,8 @@ const getUsers = async (query = {}) => {
             active: user.active,
             department_name: user.department ? user.department.name : 'N/A',
             department: user.department ? user.department._id : 'N/A',
+            location_name: user.location ? user.location.name : 'N/A',
+            location: user.location ? user.location._id : 'N/A',
             role: user.roles.map(role => role.name).join(', '),
             created_at: user.created_at
         }));
@@ -104,6 +111,7 @@ const getUser = async (id) => {
     // Find user by ID with populated fields
     const user = await User.findById(id)
         .populate('department', 'name')
+        .populate('location', 'name')
         .populate('roles', 'name');
     
     // Only show active users by default
@@ -121,6 +129,8 @@ const getUser = async (id) => {
         cnic: user.cnic,
         department_name: user.department ? user.department.name : 'N/A',
         department: user.department ? user.department._id : 'N/A',
+        location_name: user.location ? user.location.name : 'N/A',
+        location: user.location ? user.location._id : 'N/A',
         role: user.roles.map(role => role.name).join(', '),
         created_at: user.created_at
     });
@@ -146,6 +156,7 @@ const updateUser = async (id, userData) => {
 
     const populatedUser = await User.findById(id)
         .populate('department')
+        .populate('location')
         .populate({
             path: 'roles',
             select: 'name'
@@ -161,6 +172,8 @@ const updateUser = async (id, userData) => {
         cnic: populatedUser.cnic,
         department_name: populatedUser.department ? populatedUser.department.name : 'N/A',
         department: populatedUser.department ? populatedUser.department._id : 'N/A',
+        location_name: populatedUser.location ? populatedUser.location.name : 'N/A',
+        location: populatedUser.location ? populatedUser.location._id : 'N/A',
         role: populatedUser.roles[0].name,
         created_at: populatedUser.created_at
     };
@@ -190,6 +203,8 @@ const toggleUserStatus = async (id) => {
         cnic: user.cnic,
         department_name: user.department ? user.department.name : 'N/A',
         department: user.department ? user.department._id : 'N/A',
+        location_name: user.location ? user.location.name : 'N/A',
+        location: user.location ? user.location._id : 'N/A',
         role: user.roles.map(role => role.name).join(', '),
         created_at: user.created_at
     });

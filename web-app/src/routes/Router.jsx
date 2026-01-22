@@ -10,7 +10,9 @@ import { Project } from "../pages/Project";
 import { Department } from "../pages/Department";
 import Permission from "../pages/Permission";
 import { useAuth } from "../contexts/authContext";
-
+import Locations from "../pages/Location";
+import Store from "../pages/Store";
+import ProductDetail from "../pages/ProductDetail";
 
 function hasPermission(entity, permissions) {
   if (permissions[entity]) {
@@ -29,19 +31,37 @@ export default function Router() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<AuthRequiredLogin />} />
+        <Route path="/store" element={<Store />} />
+        <Route path="/product/:code" element={<ProductDetail />} />
         <Route element={<PrivateRoute />}>
           <Route path="/" element={<Home />} />
-          {hasPermission("user", permissions) && <Route path="/users" element={<Users />} />}
-          {hasPermission("project", permissions) && <Route path="/projects" element={<Project />} />}
+          {hasPermission("user", permissions) && (
+            <Route path="/users" element={<Users />} />
+          )}
+          {hasPermission("project", permissions) && (
+            <Route path="/projects" element={<Project />} />
+          )}
           {/* {<Route path="/entities" element={<Entity />} />} */}
-          {hasPermission("permission", permissions) && <Route path="/permissions" element={<Permission />} />}
-          {hasPermission("department", permissions) && <Route path="/departments" element={<Department />} />}
+          {hasPermission("permission", permissions) && (
+            <Route path="/permissions" element={<Permission />} />
+          )}
+          {hasPermission("department", permissions) && (
+            <Route path="/departments" element={<Department />} />
+          )}
+          {hasPermission("location", permissions) && (
+            <Route path="/location" element={<Locations />} />
+          )}
+          {hasPermission("store", permissions) && (
+            <>
+              {/* <Route path="/store" element={<Store />} />
+              <Route path="/product/:code" element={<ProductDetail />} /> */}
+            </>
+          )}
+         
           <Route path="/settings" element={<Settings />} />
         </Route>
         <Route path="/*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
-
   );
 }
-

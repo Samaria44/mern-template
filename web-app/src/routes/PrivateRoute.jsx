@@ -7,6 +7,7 @@ import { useAuth } from '../contexts/authContext';
 const PrivateRoute = () => {
     // const userAuth = localStorage.getItem("token");
     const { authenticated } = useAuth();
+    console.log("PrivateRoute - authenticated:", authenticated);
     // console.log("authenticated: " + authenticated);
     return authenticated ? <Outlet /> : <Navigate to="/login" />;
 }

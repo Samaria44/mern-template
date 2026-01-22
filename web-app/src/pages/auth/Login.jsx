@@ -1,6 +1,7 @@
 
 import * as React from 'react';
 import { Button, CssBaseline, TextField, Link, Box, Grid, Typography, CircularProgress } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { authService } from '../../services/authServices';
 import { Copyright } from '../../components/Copyright';
 import { useAuth } from '../../contexts/authContext';
@@ -12,7 +13,7 @@ import { useSnackbar } from 'notistack';
 
 export const Login = () => {
     const dispatch = useAppDispatch();
-    localStorage.clear();
+    const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
     const { login } = useAuth();
     const [loading, setLoading] = React.useState(false);
@@ -31,15 +32,22 @@ export const Login = () => {
             .then(response => {
                 // console.log(response);
                 setLoading(false);
-                if (response.data.accessToken) {
-                    login(response.data.accessToken, response.data.refreshToken, response.data.id, response.data.name, response.data.roles, response.data.permissions);
+                if (response && response.data && response.data.accessToken) {
+                    // console.log("Login successful, calling login function...");
+                    const loginResult = login(response.data.accessToken, response.data.refreshToken, response.data.id, response.data.name, response.data.roles, response.data.permissions);
+                    // console.log("Login function result:", loginResult);
+                    // console.log("Token:", response.data.accessToken);
                     // setMessage(response.message);
-                    // console.log(response)
+                    // console.log("Full response:", response)
                     dispatch(setIsRegisteredUser(true));
+                    // console.log("About to navigate to home...");
                     // dispatch(setUserName(response.data.name));
-                    // navigate("/");
+                    navigate("/");
+                    // console.log("Navigation called");
                     // return <Toast message={"login Successfull"} severity={1}/>
                     enqueueSnackbar("Login Sucessfull", { variant: 'success' });
+                } else {
+                    enqueueSnackbar("Invalid response from server", { variant: 'error' });
                 }
                 // alert(response)
             })

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useDemoData } from '@mui/x-data-grid-generator';
 import { DataGrid, GridToolbar, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarFilterButton } from '@mui/x-data-grid';
+
 import { Box, Button, ButtonGroup, Grid, IconButton, Tooltip } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -15,7 +16,8 @@ import { GridToolbarColumnsButton } from '@mui/x-data-grid';
 import PublishIcon from '@mui/icons-material/Publish';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
-export default function ControledDataGrid({ entity, columns, tableData = [], handleEditClick, handleDeleteClick, action, view = false, link = false, actionAllow, handleActionClick, handleLinkProjectClick, handleViewClick = () => console.log("view"), handleViewMapClick = () => console.log("map"), allowMap = false }) {
+export default function ControledDataGrid({ entity, columns, tableData = [], handleEditClick, handleDeleteClick, action, view = false, link = false, actionAllow, handleActionClick, handleLinkProjectClick, handleViewClick = () => console.log("view"), handleViewMapClick = () => console.log("map"), allowMap = false, loading = false }) {
+
   const { permissions, userName, user } = useAuth();
 
   // console.log("permissions", permissions);
@@ -70,6 +72,7 @@ export default function ControledDataGrid({ entity, columns, tableData = [], han
               showQuickFilter: true,
             },
           }}
+          loading={loading}
         />
       </Grid>
     </Grid>

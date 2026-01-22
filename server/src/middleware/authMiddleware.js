@@ -21,12 +21,29 @@ const checkPermission = (entity, action) => {
   return async (req, res, next) => {
     try {
       const UserID = getUserIdFromJwt(req.headers["authorization"]);
+
+      if (!UserID) {
+        return res.status(401).json({ message: "Invalid or missing token" });
+      }
+
       const user = await User.findById(UserID).populate('roles');
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const isAdminUser = Array.isArray(user.roles)
+        ? user.roles.some(r => r && (r.name === 'admin' || r.name === 'super admin'))
+        : false;
+
+      if (isAdminUser) {
+        return next();
+      }
+
       const permissions = await Permissions.findOne({ userId: user._id });
-      if (user.roles != 'admin' || user.roles != 'super admin') {
-        if (!user || !permissions[entity][action]) {
-          return res.status(403).json({ message: 'Access denied' });
-        }
+
+      if (!permissions || !permissions[entity] || !permissions[entity][action]) {
+        return res.status(403).json({ message: 'Access denied' });
       }
       next();
     } catch (error) {
