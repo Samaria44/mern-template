@@ -28,4 +28,8 @@ export const storeService = {
     const res = await fetchApi(`stores/code/${code}`, "GET");
     return res.data;
   },
+  getProfitAnalytics: async (timeRange = 'daily') => {
+    const res = await fetchApi(`stores/analytics?timeRange=${timeRange}`, "GET");
+    return res.data;
+  },
 };

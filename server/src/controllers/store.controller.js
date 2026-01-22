@@ -113,6 +113,48 @@ const getStoreById = async (req, res) => {
   }
 };
 
+// Get profit analytics data
+const getProfitAnalytics = async (req, res) => {
+  try {
+    const { timeRange = 'daily' } = req.query;
+    const items = await Store.find({ is_deleted: false });
+    
+    // Calculate profit metrics for each item
+    const analyticsData = items.map(item => ({
+      id: item._id,
+      name: item.name,
+      code: item.code,
+      buyPrice: item.buyPrice,
+      sellPrice: item.sellPrice,
+      profitPerUnit: item.sellPrice - item.buyPrice,
+      profitMargin: ((item.sellPrice - item.buyPrice) / item.sellPrice * 100).toFixed(2),
+      weight: item.weight,
+      carats: item.carats,
+      active: item.active
+    }));
+
+    // Calculate summary statistics
+    const totalItems = analyticsData.length;
+    const activeItems = analyticsData.filter(item => item.active).length;
+    const totalProfitPotential = analyticsData.reduce((sum, item) => sum + (item.profitPerUnit * item.weight), 0);
+    const averageProfitMargin = analyticsData.reduce((sum, item) => sum + parseFloat(item.profitMargin), 0) / totalItems;
+
+    res.json({
+      summary: {
+        totalItems,
+        activeItems,
+        totalProfitPotential,
+        averageProfitMargin: averageProfitMargin.toFixed(2)
+      },
+      items: analyticsData,
+      timeRange
+    });
+  } catch (error) {
+    console.error("Get Profit Analytics Error:", error);
+    res.status(500).json({ message: "Failed to get profit analytics", error });
+  }
+};
+
 module.exports = {
   createStore,
   getStores,
@@ -121,5 +163,6 @@ module.exports = {
   deleteStore,
   getStoreById,
   getStoreByCode,
+  getProfitAnalytics,
 };
 
