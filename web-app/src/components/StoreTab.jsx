@@ -93,9 +93,31 @@ const StoreTab = () => {
   );
 
   const columns = [
-    { field: "name", headerName: "Name", width: 200 },
-    { field: "weight", headerName: "Weight", width: 150 },
-    { field: "carats", headerName: "Carats", width: 150 },
+    { field: "name", headerName: "Medicine Name", width: 200 },
+    { field: "buyPrice", headerName: "Buy Price", width: 150, type: "number" },
+    { field: "sellPrice", headerName: "Sell Price", width: 150, type: "number" },
+    { 
+      field: "profit", 
+      headerName: "Profit Per Unit", 
+      width: 150,
+      type: "number",
+      renderCell: (params) => {
+        const profit = (params.row.sellPrice || 0) - (params.row.buyPrice || 0);
+        return profit.toFixed(2);
+      }
+    },
+    { field: "stock", headerName: "Stock", width: 120, type: "number" },
+    {
+      field: "totalProfit",
+      headerName: "Total Profit Potential",
+      width: 180,
+      type: "number",
+      renderCell: (params) => {
+        const profitPerUnit = (params.row.sellPrice || 0) - (params.row.buyPrice || 0);
+        const totalProfit = profitPerUnit * (params.row.stock || 0);
+        return totalProfit.toFixed(2);
+      }
+    },
     {
       field: "code",
       headerName: "Scan Code",
@@ -130,7 +152,7 @@ const StoreTab = () => {
     <Box>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
         <TextField
-          label="Search Store"
+          label="Search Medicine"
           size="small"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -143,7 +165,7 @@ const StoreTab = () => {
             onClick={handleOpenModal}
             sx={{ mr: 1 }}
           >
-            Add Store Item
+            Add Medicine
           </Button>
           <Button
             onClick={fetchStores}
@@ -167,7 +189,7 @@ const StoreTab = () => {
 
       {modalOpen && (
         <ScrollDialog
-          title={formData ? "Edit Store Item" : "Add New Store Item"}
+          title={formData ? "Edit Medicine" : "Add New Medicine"}
           form={<StoreForm submitHandler={handleSubmitForm} data={formData} />}
           modalOpen={modalOpen}
           handleOpenModal={handleOpenModal}

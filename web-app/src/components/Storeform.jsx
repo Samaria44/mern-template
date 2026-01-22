@@ -5,10 +5,10 @@ const StoreForm = ({ data = null, submitHandler }) => {
     const [formData, setFormData] = useState({
         id: '',
         name: '',
-        weight: '',
-        carats: '',
+        buyPrice: '',
+        sellPrice: '',
+        stock: '',
         code:'',
-        price: '',
     });
 
     useEffect(() => {
@@ -16,10 +16,10 @@ const StoreForm = ({ data = null, submitHandler }) => {
             setFormData({
                 _id: data._id || '',
                 name: data.name || '',
-                weight: data.weight || '',
-                carats: data.carats || '',
+                buyPrice: data.buyPrice || '',
+                sellPrice: data.sellPrice || '',
+                stock: data.stock || '',
                 code:data.code||'',
-                price: data.price || '',
             });
         }
     }, [data]);
@@ -36,9 +36,9 @@ const StoreForm = ({ data = null, submitHandler }) => {
 
         const payload = {
             ...rest,
-            weight: rest.weight === '' ? null : Number(rest.weight),
-            carats: rest.carats === '' ? null : Number(rest.carats),
-            price: rest.price === '' ? null : Number(rest.price),
+            buyPrice: rest.buyPrice === '' ? null : Number(rest.buyPrice),
+            sellPrice: rest.sellPrice === '' ? null : Number(rest.sellPrice),
+            stock: rest.stock === '' ? null : Number(rest.stock),
         };
 
         if (_id) {
@@ -51,7 +51,7 @@ const StoreForm = ({ data = null, submitHandler }) => {
     return (
         <form onSubmit={handleSubmit}>
             <TextField
-                label="Name"
+                label="Medicine Name"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
@@ -60,9 +60,9 @@ const StoreForm = ({ data = null, submitHandler }) => {
                 sx={{ mb: 2 }}
             />
             <TextField
-                label="Weight"
-                name="weight"
-                value={formData.weight}
+                label="Buy Price"
+                name="buyPrice"
+                value={formData.buyPrice}
                 onChange={handleChange}
                 type="number"
                 fullWidth
@@ -70,9 +70,9 @@ const StoreForm = ({ data = null, submitHandler }) => {
                 sx={{ mb: 2 }}
             />
             <TextField
-                label="Carats"
-                name="carats"
-                value={formData.carats}
+                label="Sell Price"
+                name="sellPrice"
+                value={formData.sellPrice}
                 onChange={handleChange}
                 type="number"
                 fullWidth
@@ -80,9 +80,9 @@ const StoreForm = ({ data = null, submitHandler }) => {
                 sx={{ mb: 2 }}
             />
             <TextField
-                label="Price"
-                name="price"
-                value={formData.price}
+                label="Stock Quantity"
+                name="stock"
+                value={formData.stock}
                 onChange={handleChange}
                 type="number"
                 fullWidth

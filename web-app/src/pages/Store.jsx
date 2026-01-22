@@ -4,6 +4,7 @@ import { Box, Tabs, Tab, Button, Modal } from '@mui/material';
 import { useAuth } from '../contexts/authContext';
 import StoreTab from '../components/StoreTab';
 import StoreForm from '../components/Storeform';
+import ProfitAnalytics from '../components/ProfitAnalytics';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -29,14 +30,19 @@ const Store = () => {
 
     return (
         <MiniDrawer>
-            <h1>Store Management</h1>
+            <h1>Medical Store Management</h1>
 
             <Tabs value={value} onChange={(e, v) => setValue(v)}>
-                <Tab label="All Store Items" />
+                <Tab label="All Medicines" />
+                <Tab label="Profit Analytics" />
             </Tabs>
 
             <TabPanel value={value} index={0}>
                 <StoreTab />
+            </TabPanel>
+
+            <TabPanel value={value} index={1}>
+                <ProfitAnalytics />
             </TabPanel>
 
             <Modal open={openForm} onClose={() => setOpenForm(false)}>
