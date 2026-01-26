@@ -3,6 +3,18 @@ const Store = require("../models/store");
 // Create a new store item
 const createStore = async (req, res) => {
   try {
+    const { name, sellPrice, buyPrice, stock, code } = req.body;
+    
+    // Validate required fields
+    if (!name || sellPrice === undefined || buyPrice === undefined || stock === undefined || !code) {
+      return res.status(400).json({ 
+        message: "Missing required fields",
+        required: ["name", "sellPrice", "buyPrice", "stock", "code"],
+        provided: Object.keys(req.body),
+        received: { name, sellPrice, buyPrice, stock, code }
+      });
+    }
+    
     const storeItem = await Store.create(req.body);
     res.status(201).json(storeItem);
   } catch (error) {
@@ -128,15 +140,15 @@ const getProfitAnalytics = async (req, res) => {
       sellPrice: item.sellPrice,
       profitPerUnit: item.sellPrice - item.buyPrice,
       profitMargin: ((item.sellPrice - item.buyPrice) / item.sellPrice * 100).toFixed(2),
-      weight: item.weight,
-      carats: item.carats,
+      // weight: item.weight,
+      // carats: item.carats,
       active: item.active
     }));
 
     // Calculate summary statistics
     const totalItems = analyticsData.length;
     const activeItems = analyticsData.filter(item => item.active).length;
-    const totalProfitPotential = analyticsData.reduce((sum, item) => sum + (item.profitPerUnit * item.weight), 0);
+    const totalProfitPotential = analyticsData.reduce((sum, item) => sum + (item.profitPerUnit * (item.stock || 0)), 0);
     const averageProfitMargin = analyticsData.reduce((sum, item) => sum + parseFloat(item.profitMargin), 0) / totalItems;
 
     res.json({

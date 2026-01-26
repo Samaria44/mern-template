@@ -26,8 +26,8 @@ export const AuthProvider = ({ children }) => {
     const [permissions, setPermissions] = useState(safeParse("permissions", {}));
 
     const authenticated = !!token;
-    console.log("AuthContext - token:", token);
-    console.log("AuthContext - authenticated:", authenticated);
+    // console.log("AuthContext - token:", token);
+    // console.log("AuthContext - authenticated:", authenticated);
 
     // ---------- Fetch permissions ----------
     const getPermissions = async (userId) => {

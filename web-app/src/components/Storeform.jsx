@@ -32,14 +32,22 @@ const StoreForm = ({ data = null, submitHandler }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        // Validate required fields before submission
+        if (!formData.name || !formData.buyPrice || !formData.sellPrice || !formData.stock || !formData.code) {
+            alert('Please fill in all required fields');
+            return;
+        }
+
         const { _id, ...rest } = formData;
 
         const payload = {
             ...rest,
-            buyPrice: rest.buyPrice === '' ? null : Number(rest.buyPrice),
-            sellPrice: rest.sellPrice === '' ? null : Number(rest.sellPrice),
-            stock: rest.stock === '' ? null : Number(rest.stock),
+            buyPrice: Number(rest.buyPrice),
+            sellPrice: Number(rest.sellPrice),
+            stock: Number(rest.stock),
         };
+
+        console.log("Submitting payload:", payload);
 
         if (_id) {
             submitHandler({ _id, ...payload });
